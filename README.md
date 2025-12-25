@@ -1,4 +1,4 @@
-# New-project-Dec-25th
+# Stock Ml project
 📈 Stock Market ML Pipeline with Real-Time Sentiment Analysis
 A production-ready machine learning pipeline that combines financial sentiment analysis with stock price prediction, featuring real-time data processing, MySQL database integration, and an interactive dashboard.
 🎯 Project Overview
