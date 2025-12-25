@@ -162,7 +162,21 @@ Email: dongre28030@gmail.com//dongre2003@gmail.com
 
 Note: This project is for educational and portfolio purposes only. Not financial advice.
 
+Some Screenshots:
+<img width="1176" height="391" alt="Screenshot 2025-12-25 at 9 43 17 PM" src="https://github.com/user-attachments/assets/a0131f84-c737-4e92-ab6d-c838080a7e97" />
+
+<img width="1139" height="381" alt="Screenshot 2025-12-25 at 9 43 24 PM" src="https://github.com/user-attachments/assets/5c3d5a9a-b516-4637-a101-8e670f4ab10e" />
+<img width="1339" height="545" alt="Screenshot 2025-12-25 at 9 43 59 PM" src="https://github.com/user-attachments/assets/832f96cb-aedd-496b-b873-92480cf5b340" />
+<img width="1390" height="563" alt="Screenshot 2025-12-25 at 9 44 46 PM" src="https://github.com/user-attachments/assets/a1786b9d-690c-496e-8629-fa6bde9ad9e0" />
+
+
+
+
+
 <img width="1395" height="542" alt="Screenshot 2025-12-25 at 9 45 12 PM" src="https://github.com/user-attachments/assets/83cd3cb2-b6ff-40e9-8fd5-44f445fb8f26" />
+<img width="1395" height="720" alt="Screenshot 2025-12-25 at 9 45 19 PM" src="https://github.com/user-attachments/assets/113b922c-cd46-458e-8d0d-0b00e8adf6d6" />
+
+
 
 
 
