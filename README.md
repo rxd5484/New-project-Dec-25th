@@ -147,28 +147,23 @@ pytest tests/integration/
 
 # Check code coverage
 pytest --cov=src tests/
-📚 Future Enhancements
-
- Add more ML models (Random Forest, XGBoost)
- Implement real-time WebSocket updates
- Add portfolio optimization features
- Deploy to AWS/GCP with CI/CD
- Add backtesting framework
- Implement A/B testing for models
 
 🤝 Contributing
 This is a portfolio project, but suggestions are welcome! Please open an issue or submit a pull request.
 📄 License
 MIT License - feel free to use this project for learning and portfolio purposes.
 👤 Author
-Your Name: Rakshit Dongre
+Name: Rakshit Dongre
 
 LinkedIn: 
 GitHub: rxd5484
-Email: your.email@example.com
+Email: dongre28030@gmail.com//dongre2003@gmail.com
 
 
 Note: This project is for educational and portfolio purposes only. Not financial advice.
+
+<img width="1395" height="542" alt="Screenshot 2025-12-25 at 9 45 12 PM" src="https://github.com/user-attachments/assets/83cd3cb2-b6ff-40e9-8fd5-44f445fb8f26" />
+
 
 
 
