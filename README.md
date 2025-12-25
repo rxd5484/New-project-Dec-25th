@@ -93,25 +93,6 @@ bashuvicorn src.api.main:app --reload
 
 Launch the dashboard
 
-bashcd dashboard
-npm install
-npm start
-📁 Project Structure
-stock-ml-pipeline/
-├── src/
-│   ├── data_collection/      # Data ingestion scripts
-│   ├── database/              # MySQL connection and queries
-│   ├── models/                # ML model training and inference
-│   ├── api/                   # FastAPI endpoints
-│   └── utils/                 # Helper functions
-├── scripts/                   # Setup and maintenance scripts
-├── dashboard/                 # React frontend
-├── notebooks/                 # Jupyter notebooks for analysis
-├── tests/                     # Unit and integration tests
-├── docker/                    # Docker configuration
-├── config.yaml               # Configuration file
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
 🔑 Key Features
 1. Data Collection
 
@@ -156,30 +137,6 @@ Sentiment timeline visualization
 Prediction confidence intervals
 Model performance metrics
 
-📈 Use Cases & Interview Talking Points
-Data Engineering
-
-Designed normalized MySQL schema with proper indexing strategies
-Implemented ETL pipeline handling 10K+ records daily
-Optimized queries reducing response time by 70%
-
-Machine Learning
-
-Fine-tuned transformer model for financial sentiment (85% accuracy)
-Developed LSTM model with custom attention mechanism
-Implemented cross-validation and hyperparameter tuning
-
-Software Engineering
-
-Built RESTful API with FastAPI following best practices
-Implemented comprehensive error handling and logging
-Created modular, testable code with 80%+ coverage
-
-System Design
-
-Designed scalable architecture supporting real-time processing
-Implemented caching layer for frequently accessed data
-Used containerization for reproducible deployments
 
 🧪 Testing
 bash# Run unit tests
@@ -212,3 +169,6 @@ Email: your.email@example.com
 
 
 Note: This project is for educational and portfolio purposes only. Not financial advice.
+
+
+
