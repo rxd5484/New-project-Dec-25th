@@ -164,7 +164,7 @@ Note: This project is for educational and portfolio purposes only. Not financial
 
 
 Some Screenshots:
-<img width="1352" height="674" alt="Screenshot 2025-12-25 at 9 41 15 PM" src="https://github.com/user-attachments/assets/1fc783ba-a182-442d-8e73-e5d396c01695" />
+
 
 <img width="1335" height="620" alt="Screenshot 2025-12-25 at 9 42 21 PM" src="https://github.com/user-attachments/assets/047989c0-1d97-4ddc-b54e-9c7ed8d7c2f8" />
 
