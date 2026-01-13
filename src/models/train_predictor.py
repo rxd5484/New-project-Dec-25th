@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import pandas as pd
+from decimal import Decimal
 from typing import Tuple, List, Dict, Optional
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
@@ -17,6 +18,17 @@ import joblib
 
 sys.path.append(str(Path(__file__).parent.parent))
 from database.db_manager import get_db_manager
+
+
+def convert_decimals_to_float(df):
+    '''Convert Decimal columns to float'''
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            try:
+                df[col] = df[col].apply(lambda x: float(x) if isinstance(x, Decimal) else x)
+            except:
+                pass
+    return df
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -171,7 +183,7 @@ class StockPricePredictor:
             df['sentiment_score'] = 0
         
         # Fill missing values
-        df = df.fillna(method='ffill').fillna(0)
+        df = df.ffill().fillna(0)
         
         logger.info(f"Fetched {len(df)} records for {symbol}")
         return df
@@ -229,6 +241,11 @@ class StockPricePredictor:
         """
         # Fetch data
         df = self.fetch_training_data(symbol)
+        # Convert Decimal columns to float
+        for col in df.columns:
+            if df[col].dtype == 'object':
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+
         
         if df.empty:
             raise ValueError(f"No data available for {symbol}")
@@ -379,6 +396,11 @@ class StockPricePredictor:
         
         # Fetch recent data
         df = self.fetch_training_data(symbol)
+        # Convert Decimal columns to float
+        for col in df.columns:
+            if df[col].dtype == 'object':
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+
         
         if len(df) < self.sequence_length:
             raise ValueError(f"Not enough data for prediction")
@@ -441,24 +463,34 @@ class StockPricePredictor:
         logger.info(f"Model loaded from {path}")
 
 
+
 def main():
-    """Main training function."""
-    predictor = StockPricePredictor(sequence_length=60)
+    import sys
     
-    symbol = 'AAPL'
+    # Get symbol from command line
+    if len(sys.argv) > 1:
+        symbol = sys.argv[1].upper()
+        print(f"\n>>> Training {symbol} <<<\n")
+    else:
+        symbol = 'AAPL'
+        print(f"\n>>> No symbol provided, training AAPL <<<\n")
     
     logger.info(f"Training price prediction model for {symbol}...")
-    metrics = predictor.train(symbol, epochs=50, batch_size=32)
     
-    logger.info("Training complete!")
-    logger.info(f"Metrics: {metrics}")
+    # Train
+    predictor = StockPricePredictor()
+    metrics = predictor.train(symbol)
     
-    # Make prediction
+    # Predict
     prediction = predictor.predict(symbol)
-    logger.info(f"\nPrediction for {symbol}:")
+    
+    # Display results
+    logger.info(f"\n" + "="*50)
+    logger.info(f"Prediction for {symbol}:")
     logger.info(f"Current Price: ${prediction['current_price']:.2f}")
     logger.info(f"Predicted Price: ${prediction['predicted_price']:.2f}")
     logger.info(f"Confidence Interval: ${prediction['confidence_lower']:.2f} - ${prediction['confidence_upper']:.2f}")
+    logger.info("="*50)
 
 
 if __name__ == "__main__":
