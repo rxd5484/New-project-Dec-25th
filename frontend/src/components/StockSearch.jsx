@@ -1,67 +1,74 @@
-import { useState } from 'react';
-import { Search, TrendingUp } from 'lucide-react';
+import { useState } from 'react'
+import { Search } from 'lucide-react'
+import { getStockPrediction, getStockSentiment } from '../services/api'
 
-const popularStocks = ['AAPL', 'TSLA', 'GOOGL', 'MSFT', 'AMZN', 'NVDA'];
+const POPULAR_STOCKS = ['AAPL', 'TSLA', 'AMZN', 'NVDA', 'GOOGL', 'MSFT']
 
-function StockSearch({ onSearch, loading }) {
-  const [symbol, setSymbol] = useState('');
+export default function StockSearch({ onSearch, loading }) {
+  const [symbol, setSymbol] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (symbol.trim() && !loading) {
-      onSearch(symbol.trim().toUpperCase());
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!symbol.trim()) return
+
+    try {
+      const [prediction, sentiment] = await Promise.all([
+        getStockPrediction(symbol.toUpperCase()),
+        getStockSentiment(symbol.toUpperCase())
+      ])
+      onSearch({ prediction, sentiment })
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      throw error
     }
-  };
+  }
 
-  const handleQuickSelect = (stock) => {
-    setSymbol(stock);
-    onSearch(stock);
-  };
+  const handleQuickSelect = async (stock) => {
+    setSymbol(stock)
+    try {
+      const [prediction, sentiment] = await Promise.all([
+        getStockPrediction(stock),
+        getStockSentiment(stock)
+      ])
+      onSearch({ prediction, sentiment })
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
 
   return (
-    <div className="card p-8 animate-slide-up">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-            <Search className="w-5 h-5" />
-          </div>
+    <div className="space-y-3">
+      {/* Search Form */}
+      <form onSubmit={handleSubmit} className="relative">
+        <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-full px-4 py-2.5 focus-within:border-blue-500 transition-colors">
+          <Search className="w-4 h-4 text-zinc-500" />
           <input
             type="text"
             value={symbol}
             onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-            placeholder="Enter stock ticker (e.g., AAPL, TSLA)"
-            className="input-field w-full pl-12 text-lg"
+            placeholder="Search stocks..."
+            className="flex-1 bg-transparent text-sm outline-none placeholder-zinc-600"
             disabled={loading}
           />
+          {loading && (
+            <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          )}
         </div>
-
-        <button
-          type="submit"
-          disabled={loading || !symbol.trim()}
-          className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <TrendingUp className="w-5 h-5" />
-          <span>{loading ? 'Analyzing...' : 'Analyze Stock'}</span>
-        </button>
       </form>
 
-      <div className="mt-6 pt-6 border-t border-slate-200">
-        <p className="text-sm text-slate-500 mb-3 font-medium">Popular stocks:</p>
-        <div className="flex flex-wrap gap-2">
-          {popularStocks.map((stock) => (
-            <button
-              key={stock}
-              onClick={() => handleQuickSelect(stock)}
-              disabled={loading}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700 transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {stock}
-            </button>
-          ))}
-        </div>
+      {/* Quick Select */}
+      <div className="flex flex-wrap gap-2">
+        {POPULAR_STOCKS.map((stock) => (
+          <button
+            key={stock}
+            onClick={() => handleQuickSelect(stock)}
+            disabled={loading}
+            className="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-zinc-700 transition-colors disabled:opacity-50"
+          >
+            {stock}
+          </button>
+        ))}
       </div>
     </div>
-  );
+  )
 }
-
-export default StockSearch;

@@ -1,127 +1,66 @@
-import { TrendingUp, TrendingDown, DollarSign, Target, Clock } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
-function PredictionCard({ prediction }) {
+export default function PredictionCard({ data }) {
+  if (!data) return null
+
   const { 
     symbol, 
     current_price, 
     predicted_price, 
     price_change, 
     price_change_percent,
-    confidence_interval,
     model_confidence,
-    prediction_date,
     direction 
-  } = prediction;
+  } = data
 
-  const isPositive = price_change > 0;
-  const TrendIcon = isPositive ? TrendingUp : TrendingDown;
-  const trendColor = isPositive ? 'text-emerald-600' : 'text-red-600';
-  const bgColor = isPositive ? 'bg-emerald-50' : 'bg-red-50';
-  const borderColor = isPositive ? 'border-emerald-200' : 'border-red-200';
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
-  };
-
-  const formatPercent = (value) => {
-    return `${value > 0 ? '+' : ''}${value.toFixed(2)}%`;
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
+  const isUp = direction === 'up'
+  const isDown = direction === 'down'
 
   return (
-    <div className="card p-6 space-y-6">
+    <div className="border border-zinc-800 rounded-xl p-4 bg-zinc-900/50">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between mb-3">
         <div>
-          <h2 className="text-3xl font-bold text-slate-800 mb-1">{symbol}</h2>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Clock className="w-4 h-4" />
-            <span>Prediction for {formatDate(prediction_date)}</span>
-          </div>
+          <h3 className="text-sm font-semibold text-zinc-400">Price Prediction</h3>
+          <p className="text-2xl font-bold mt-1">{symbol}</p>
         </div>
-        <div className={`${bgColor} ${borderColor} border rounded-xl px-3 py-2`}>
-          <TrendIcon className={`w-6 h-6 ${trendColor}`} />
-        </div>
-      </div>
-
-      {/* Main prediction */}
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-xl p-6 border border-slate-200/60">
-        <div className="text-sm text-slate-600 mb-2 font-medium">Predicted Price</div>
-        <div className="flex items-end gap-3 mb-4">
-          <div className="text-4xl font-bold text-slate-900">
-            {formatPrice(predicted_price)}
-          </div>
-          <div className={`${trendColor} font-semibold text-lg mb-1`}>
-            {formatPercent(price_change_percent)}
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-slate-500">Current:</span>
-          <span className="font-semibold text-slate-700">{formatPrice(current_price)}</span>
-          <span className="text-slate-400">•</span>
-          <span className="text-slate-500">Change:</span>
-          <span className={`font-semibold ${trendColor}`}>
-            {formatPrice(Math.abs(price_change))}
-          </span>
+        <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+          isUp ? 'bg-green-950/30 text-green-400' :
+          isDown ? 'bg-red-950/30 text-red-400' :
+          'bg-zinc-800 text-zinc-400'
+        }`}>
+          {isUp && <TrendingUp className="w-3 h-3" />}
+          {isDown && <TrendingDown className="w-3 h-3" />}
+          {!isUp && !isDown && <Minus className="w-3 h-3" />}
+          {price_change_percent > 0 && '+'}{price_change_percent.toFixed(2)}%
         </div>
       </div>
 
-      {/* Metrics grid */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="metric-card">
-          <div className="flex items-center gap-2 mb-2">
-            <Target className="w-4 h-4 text-blue-600" />
-            <span className="text-xs text-slate-600 font-medium">Direction</span>
-          </div>
-          <div className={`badge ${isPositive ? 'badge-success' : 'badge-danger'}`}>
-            {direction.toUpperCase()}
-          </div>
+      {/* Prices */}
+      <div className="grid grid-cols-2 gap-4 mb-3">
+        <div>
+          <p className="text-xs text-zinc-500">Current</p>
+          <p className="text-lg font-semibold">${current_price.toFixed(2)}</p>
         </div>
-
-        <div className="metric-card">
-          <div className="flex items-center gap-2 mb-2">
-            <DollarSign className="w-4 h-4 text-blue-600" />
-            <span className="text-xs text-slate-600 font-medium">Confidence</span>
-          </div>
-          <div className="text-lg font-bold text-slate-900">
-            {(model_confidence * 100).toFixed(1)}%
-          </div>
+        <div>
+          <p className="text-xs text-zinc-500">Predicted</p>
+          <p className="text-lg font-semibold">${predicted_price.toFixed(2)}</p>
         </div>
       </div>
 
-      {/* Confidence interval */}
-      {confidence_interval && (
-        <div className="pt-4 border-t border-slate-200">
-          <div className="text-xs text-slate-600 mb-3 font-medium">Confidence Interval (95%)</div>
-          <div className="flex items-center justify-between text-sm">
-            <div>
-              <span className="text-slate-500">Low:</span>
-              <span className="ml-2 font-semibold text-slate-700">
-                {formatPrice(confidence_interval.lower)}
-              </span>
-            </div>
-            <div>
-              <span className="text-slate-500">High:</span>
-              <span className="ml-2 font-semibold text-slate-700">
-                {formatPrice(confidence_interval.upper)}
-              </span>
-            </div>
-          </div>
+      {/* Confidence */}
+      <div className="pt-3 border-t border-zinc-800">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-zinc-500">Model Confidence</span>
+          <span className="font-medium">{(model_confidence * 100).toFixed(0)}%</span>
         </div>
-      )}
+        <div className="mt-1.5 h-1 bg-zinc-800 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-blue-500 rounded-full"
+            style={{ width: `${model_confidence * 100}%` }}
+          />
+        </div>
+      </div>
     </div>
-  );
+  )
 }
-
-export default PredictionCard;
